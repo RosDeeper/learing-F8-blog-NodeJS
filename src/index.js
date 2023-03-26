@@ -28,7 +28,6 @@ app.get('/', (req, res) =>{
 });
 
 app.get('/news', (req, res) =>{ 
-    console.log(req.query);
     return res.render('news'); 
 });
 
@@ -37,7 +36,6 @@ app.get('/search', (req,res) =>{
 });
 
 app.post('/search', (req,res) =>{
-    console.log(req.body.gender)
     res.send()
 });
 
