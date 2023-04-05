@@ -3,18 +3,13 @@ const {mutipleToObject} = require('../../util/mongoose')
 
 class SiteController{
 
-    index(req, res, next)
+    storedCourses(req, res, next)
     {
         Course.find({})
             .then((courses) => {
-                res.render('home', {courses: mutipleToObject(courses)});
+                res.render('me/stored-courses', {courses: mutipleToObject(courses)});
             })
             .catch(next);
-    }
-
-    search(req, res)
-    {
-        res.render('search');
     }
 }
 
