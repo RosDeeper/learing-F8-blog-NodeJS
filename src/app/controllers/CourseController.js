@@ -1,5 +1,6 @@
 const Course = require('../models/course');
 const {singleToObject} = require('../../util/mongoose');
+const course = require('../models/course');
 
 class CourseController {
     //[GET] courses/:slug
@@ -24,7 +25,7 @@ class CourseController {
         //res.json(req.body);
         const course = new Course(req.body);
         course.save()
-            .then(res.redirect('/'))
+            .then(res.redirect('/me/courses'))
             .catch(next);
     }
 
@@ -38,7 +39,7 @@ class CourseController {
             .catch(next);
     }
 
-    //[PUT]courses/:id
+    //[PUT] courses/:id
     update(req, res, next)
     {
         Course.updateOne({_id: req.params.id}, req.body)
@@ -48,10 +49,30 @@ class CourseController {
             .catch(next);
     }
 
-    //[DELETE]courses/:id
+    //[DELETE] courses/:id
     remove(req, res, next)
     {
+        Course.delete({_id: req.params.id})
+            .then(() => {
+                res.redirect('back');
+            })
+            .catch(next);
+    }
+
+    //[DELETE] courses/:id/force
+    forceRemove(req, res, next)
+    {
         Course.deleteOne({_id: req.params.id})
+            .then(() => {
+                res.redirect('back');
+            })
+            .catch(next);
+    }
+
+    //[PATCH] courses/:id/restore
+    restore(req, res, next)
+    {
+        Course.restore({_id: req.params.id})
             .then(() => {
                 res.redirect('back');
             })
