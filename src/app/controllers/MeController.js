@@ -1,14 +1,18 @@
 const Course = require('../models/course');
-const {mutipleToObject} = require('../../util/mongoose')
+const {mutipleToObject} = require('../../util/mongoose');
+const course = require('../models/course');
 
 class SiteController{
 
     //[GET] me/courses
     storedCourses(req, res, next)
     {
-        Course.find({})
-            .then((courses) => {
-                res.render('me/stored-courses', {courses: mutipleToObject(courses)});
+        Promise.all([Course.find({}), Course.countDocumentsDeleted()])
+            .then(([courses, deleteCount]) => {  
+                res.render('me/stored-courses', {
+                    courses: mutipleToObject(courses),
+                    deleteCount
+                });
             })
             .catch(next);
     }
