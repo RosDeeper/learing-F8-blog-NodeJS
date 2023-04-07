@@ -78,6 +78,45 @@ class CourseController {
             })
             .catch(next);
     }
+
+    //[POST] courses/container-form-action
+    submitContainer(req, res, next)
+    {
+        switch(req.body.action) {
+            case 'delete':
+                Course.delete({_id: {$in: req.body.courseIDs}})
+                    .then(() => {
+                        res.redirect('back');
+                    })
+                    .catch(next);
+                break;
+            default: res.send('Invalid');
+        }
+    }
+
+    //[POST] courses/bin-container-form
+    submitBinContainer(req, res, next)
+    {
+        switch(req.body.action) {
+            case 'restore':
+                Course.restore({_id: {$in: req.body.deletedCourseIDs}})
+                .then(() => {
+                    res.redirect('back');
+                })
+                .catch(next);
+                break;
+
+            case 'delete':
+                Course.deleteMany({_id: {$in: req.body.deletedCourseIDs}})
+                    .then(() => {
+                        res.redirect('back');
+                    })
+                    .catch(next);
+                    break;
+                    
+            default: res.send('Invalid');
+        }
+    }
 }
 
 module.exports = new CourseController;
