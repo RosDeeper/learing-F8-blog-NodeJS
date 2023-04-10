@@ -6,6 +6,7 @@ const { engine } = require('express-handlebars');
 const app = express();
 const port = 3000;
 
+const SortMiddleware = require('./app/middlewares/SortMiddleware');
 const route = require('./routes');
 const db = require('./config/db');
 
@@ -19,6 +20,9 @@ app.use(express.urlencoded({
 }));
 app.use(express.json());
 
+//Custom middleware
+app.use(SortMiddleware);
+
 app.use(methodOverride('_method'));
 
 //HTTP logger
@@ -31,6 +35,32 @@ app.engine(
         extname: '.hbs',
         helpers: {
             sum: (a, b) => a + b,
+            sortable: (field, sort) => {
+                let sortType = 'default';
+                
+                if(field === sort.column) {
+                    sortType = sort.type;
+                } else {
+                    sortType = 'default';
+                }
+
+                const icons = {
+                    default: 'filter',
+                    asc: 'arrow-up',
+                    desc: 'arrow-down',
+                }
+
+                const types = {
+                    default: 'desc',
+                    asc: 'desc',
+                    desc: 'asc',
+                }
+
+                const icon = icons[sortType];
+                const type = types[sortType];
+
+                return '<a href="?_sort&column='+field+'&type='+type+'"><i data-feather="'+icon+'"></i></a>';
+            }
         }
     }));
 
