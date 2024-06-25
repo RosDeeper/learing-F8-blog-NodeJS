@@ -27,9 +27,18 @@
             <tr>
                 <th></th>
                 <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">VideoID</th>
-                <th scope="col">Time</th>
+                <th scope="col">
+                    Name
+                    {{{sortable 'name' _sort}}}
+                </th>
+                <th scope="col">
+                    VideoID
+                    {{{sortable 'videoID' _sort}}}
+                </th>
+                <th scope="col">
+                    Time
+                    {{{sortable 'deletedAt' _sort}}}
+                </th>
                 <th></th>
             </tr>
         </thead>

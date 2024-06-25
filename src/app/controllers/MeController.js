@@ -29,7 +29,15 @@ class SiteController{
     //[GET] me/courses/bin
     binCourses(req, res, next)
     {
-        Course.findDeleted({})
+        let courseQuery = Course.findDeleted({});
+
+        if(req.query.hasOwnProperty('_sort')) {
+            courseQuery = courseQuery.sort({
+                [req.query.column]: req.query.type
+            });
+        }
+
+        courseQuery
             .then((courses) => {
                 res.render('me/bin-courses', {courses: mutipleToObject(courses)});
             })
